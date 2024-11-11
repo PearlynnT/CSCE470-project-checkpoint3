@@ -55,6 +55,31 @@
             <input type="number" id="trip-duration" name="trip-duration">
         </div>
 
+        <div>
+            <div class="form-label">
+                <label>Preference Match Weight: <span id="weight1Display">0.25</span></label>
+            </div>
+            <input type="range" id="pref-weight" min="0" max="1" step="0.01" value="0.25" oninput="updateWeights()">
+        </div>
+        <div>
+            <div class="form-label">
+                <label>Safety Weight: <span id="weight2Display">0.25</span></label>
+            </div>
+            <input type="range" id="safety-weight" min="0" max="1" step="0.01" value="0.25" oninput="updateWeights()">
+        </div>
+        <div>
+            <div class="form-label">
+                <label>Social Weight: <span id="weight3Display">0.25</span></label>
+            </div>
+            <input type="range" id="social-weight" min="0" max="1" step="0.01" value="0.25" oninput="updateWeights()">
+        </div>
+        <div>
+            <div class="form-label">
+                <label>Budget Fit Weight: <span id="weight4Display">0.25</span></label>
+            </div>
+            <input type="range" id="budget-weight" min="0" max="1" step="0.01" value="0.25" oninput="updateWeights()">
+        </div>
+
         <div class="form-field">
             <div class="form-label">
                 <label for="country-list">List of countries that you are considering to travel to:</label>
@@ -76,7 +101,7 @@
     <h2>How It Works</h2>
 
     <div class="explanation">
-        <p>Final score for each destination is calculated based on</p>
+        <p>Final score for each destination is calculated based on your defined weights for each factor</p>
     </div>
     <div class="explanation-points">
         <p>1. Preference matching score: How well the destination matches your activity preferences.</p>
@@ -122,6 +147,26 @@
         }
 
         startSlideshow();
+
+        function updateWeights() {
+            const sliders = [
+                document.getElementById('pref-weight'),
+                document.getElementById('safety-weight'),
+                document.getElementById('social-weight'),
+                document.getElementById('budget-weight')
+            ];
+
+            let total = sliders.reduce((sum, slider) => sum + parseFloat(slider.value), 0);
+
+            if (total === 0) {
+                sliders.forEach(slider => slider.value = 0.25);
+                total = 1;
+            }
+
+            sliders.forEach((slider, index) => {
+                document.getElementById(`weight${index + 1}Display`).textContent = parseFloat(slider.value).toFixed(2);
+            });
+        }
 
         async function fetchCountryData(countryName) {
             const apiKey = "{{ OPENCAGE_API_KEY }}";
@@ -176,16 +221,16 @@
             const tripDuration = parseInt(document.getElementById('trip-duration').value);
 
             if (isNaN(budget) || budget <= 0) {
+                loadingIndicator.style.display = "none";
                 resultsDiv.innerHTML = `<p>Please enter a valid budget greater than zero.</p>`;
                 budgetField.focus();
-                loadingIndicator.style.display = "none";
                 return;
             }
 
             if (isNaN(tripDuration) || tripDuration <= 0) {
+                loadingIndicator.style.display = "none";
                 resultsDiv.innerHTML += `<p>Please enter a valid trip duration greater than zero.</p>`;
                 tripDurationField.focus();
-                loadingIndicator.style.display = "none";
                 return;
             }
 
@@ -198,7 +243,14 @@
                     trip_duration: tripDuration
                 };
 
-                const weights = [0.4, 0.3, 0.2, 0.1];
+                const sliders = [
+                    parseFloat(document.getElementById('pref-weight').value),
+                    parseFloat(document.getElementById('safety-weight').value),
+                    parseFloat(document.getElementById('social-weight').value),
+                    parseFloat(document.getElementById('budget-weight').value)
+                ];
+                let totalWeight = sliders.reduce((sum, slider) => sum + slider, 0);
+                const weights = [sliders[0] / totalWeight, sliders[1] / totalWeight, sliders[2] / totalWeight, sliders[3] / totalWeight];
 
                 const response = await fetch('/rank-destinations', {
                     method: 'POST',
