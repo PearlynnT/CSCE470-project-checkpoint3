@@ -8,6 +8,25 @@
 </head>
 <body>
     <h1>SoloWanderlust</h1>
+
+    <div id="slideshow" class="slideshow-container">
+        <div class="slide fade">
+            <img src="{{ url_for('static', filename='images/singapore.jpeg') }}" alt="Singapore">
+        </div>
+        <div class="slide fade">
+            <img src="{{ url_for('static', filename='images/tokyo.jpeg') }}" alt="Tokyo">
+        </div>
+        <div class="slide fade">
+            <img src="{{ url_for('static', filename='images/london.jpeg') }}" alt="London">
+        </div>
+        <div class="slide fade">
+            <img src="{{ url_for('static', filename='images/washingtondc.jpeg') }}" alt="Washington DC">
+        </div>
+
+        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    </div>
+
     <form id="preference-form">
         <label for="activities">Preferred Activities:</label>
         <input type="text" id="activities" name="activities">
@@ -33,6 +52,32 @@
     <div id="results"></div>
 
     <script>
+        let slideIndex = 0;
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }    
+            slides[slideIndex - 1].style.display = "block";  
+            setTimeout(showSlides, 3000); // Change image every 3 seconds
+        }
+
+        function changeSlide(n) {
+            slideIndex += n;
+            let slides = document.getElementsByClassName("slide");
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            if (slideIndex < 1) { slideIndex = slides.length }
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slides[slideIndex - 1].style.display = "block";
+        }
+
+        showSlides();
+
         async function fetchCountryData(countryName) {
             const apiKey = "{{ OPENCAGE_API_KEY }}";
             const cd = {{ cd | tojson }};
