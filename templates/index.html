@@ -26,10 +26,10 @@
         </select>
         
         <button type="submit">Find Destinations</button>
-
-        <!-- <div id="loading-indicator">Loading, please wait...</div> -->
     </form>
     
+    <div id="loading-indicator">Loading, please wait...</div>
+
     <div id="results"></div>
 
     <script>
@@ -79,22 +79,25 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = "";
 
+            const loadingIndicator = document.getElementById('loading-indicator');
+            loadingIndicator.style.display = "block";
+
             const budget = parseInt(document.getElementById('budget').value);
             const tripDuration = parseInt(document.getElementById('trip-duration').value);
 
             if (isNaN(budget) || budget <= 0) {
                 resultsDiv.innerHTML = `<p>Please enter a valid budget greater than zero.</p>`;
                 budgetField.focus();
+                loadingIndicator.style.display = "none";
                 return;
             }
 
             if (isNaN(tripDuration) || tripDuration <= 0) {
                 resultsDiv.innerHTML += `<p>Please enter a valid trip duration greater than zero.</p>`;
                 tripDurationField.focus();
+                loadingIndicator.style.display = "none";
                 return;
             }
-
-            // document.getElementById('loading-indicator').style.display = 'block';
 
             try {
                 const { countries, coordinates, currencies } = await getSelectedCountriesData();
@@ -129,10 +132,9 @@
                 console.error('Error in form submission:', error);
                 const resultsDiv = document.getElementById('results');
                 resultsDiv.innerHTML = `<p>An error occurred while fetching results.</p>`;
-            } 
-            // finally {
-                // document.getElementById('loading-indicator').style.display = 'none';
-            // }
+            } finally {
+                loadingIndicator.style.display = "none";
+            }
         });
     </script>
 </body>
