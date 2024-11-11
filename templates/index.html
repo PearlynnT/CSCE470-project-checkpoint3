@@ -76,6 +76,24 @@
         document.getElementById('preference-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = "";
+
+            const budget = parseInt(document.getElementById('budget').value);
+            const tripDuration = parseInt(document.getElementById('trip-duration').value);
+
+            if (isNaN(budget) || budget <= 0) {
+                resultsDiv.innerHTML = `<p>Please enter a valid budget greater than zero.</p>`;
+                budgetField.focus();
+                return;
+            }
+
+            if (isNaN(tripDuration) || tripDuration <= 0) {
+                resultsDiv.innerHTML += `<p>Please enter a valid trip duration greater than zero.</p>`;
+                tripDurationField.focus();
+                return;
+            }
+
             // document.getElementById('loading-indicator').style.display = 'block';
 
             try {
@@ -83,19 +101,9 @@
 
                 const userPreferences = {
                     activities: document.getElementById('activities').value,
-                    budget: parseInt(document.getElementById('budget').value),
-                    trip_duration: parseInt(document.getElementById('trip-duration').value)
+                    budget: budget,
+                    trip_duration: tripDuration
                 };
-
-                // if (isNaN(budget) || budget <= 0) {
-                //     alert('Please enter a valid budget.');
-                //     return;
-                // }
-
-                // if (isNaN(tripDuration) || tripDuration <= 0) {
-                //     alert('Please enter a valid trip duration.');
-                //     return;
-                // }
 
                 const weights = [0.4, 0.3, 0.2, 0.1];
 
@@ -112,7 +120,6 @@
                 });
 
                 const rankedResults = await response.json();
-                const resultsDiv = document.getElementById('results');
                 resultsDiv.innerHTML = `<h2>Ranked Destinations:</h2>`;
 
                 rankedResults.forEach(destination => {
