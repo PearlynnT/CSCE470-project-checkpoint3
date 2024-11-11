@@ -1,0 +1,34 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f9;
+}
+
+h1 {
+    color: #333;
+}
+
+form label {
+    display: block;
+    margin: 8px 0 4px;
+}
+
+input, button {
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+#results h2 {
+    margin-top: 20px;
+    color: #444;
+}
+
+#loading-indicator {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5em;
+    color: #333;
+}
