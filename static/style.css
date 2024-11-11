@@ -6,13 +6,31 @@ body {
 
 h1 {
     color: #333;
+    text-align:center;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+h2 {
+    color: #333;
+    text-align:center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.tagline {
+    text-align:center;
+    font-size: 20px;
+    font-style: italic;
+
 }
 
 /* Slideshow */
 .slideshow-container {
     position: relative;
-    max-width: 100%;
+    max-width: 65%;
     margin: auto;
+    align-items: center;
 }
 
 .slide {
@@ -60,14 +78,43 @@ h1 {
 }
 
 /* Form */
-form label {
-    display: block;
-    margin: 8px 0 4px;
-}
+.form-container {
+    margin: auto;
+    text-align: center;
+}  
 
-input, button {
+.form-container input, button {
     padding: 8px;
     margin-bottom: 10px;
+}
+
+#country-list {
+    height: 150px;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+#country-list:focus {
+    border-color: #007BFF;
+}
+
+#country-list option {
+    padding: 5px;
+    background-color: #fff;
+}
+
+#country-list option:hover {
+    background-color: #f1f1f1;
+}
+
+.submit-btn{
+    margin-top: 15px;
+    font-size: 15px;
 }
 
 #results h2 {
@@ -77,10 +124,19 @@ input, button {
 
 #loading-indicator {
     display: none; /* Hidden by default */
-    position: fixed;
+    position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.5em;
     color: #333;
+}
+
+.explanation {
+    font-weight: bold;
+    text-align: center;
+}
+
+.explanation-points {
+    text-align: center;
 }

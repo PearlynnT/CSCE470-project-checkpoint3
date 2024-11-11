@@ -9,7 +9,11 @@
 <body>
     <h1>SoloWanderlust</h1>
 
-    <div id="slideshow" class="slideshow-container">
+    <div class="tagline">
+        <p>Discover Destinations that Speak to You – Crafted for the Solo Journey.</p>
+    </div>
+
+    <div id="slideshow" class="slideshow-container" onmouseover="pauseSlideshow()" onmouseout="resumeSlideshow()">
         <div class="slide fade">
             <img src="{{ url_for('static', filename='images/singapore.jpeg') }}" alt="Singapore">
         </div>
@@ -27,29 +31,59 @@
         <a class="next" onclick="changeSlide(1)">&#10095;</a>
     </div>
 
-    <form id="preference-form">
-        <label for="activities">Preferred Activities:</label>
-        <input type="text" id="activities" name="activities">
-        
-        <label for="budget">Budget per Night:</label>
-        <input type="number" id="budget" name="budget">
-        
-        <label for="trip-duration">Trip Duration (days):</label>
-        <input type="number" id="trip-duration" name="trip-duration">
+    <h2>Explore Destinations</h2>
 
-        <label for="country-list">List of countries that you are considering to travel to:</label>
-        <select id="country-list" name="countries" multiple>
-            {% for country in countries %}
-                <option value="{{ country }}">{{ country }}</option>
-            {% endfor %}
-        </select>
+    <form id="preference-form" class="form-container">
+        <div class="form-field">
+            <div class="form-label">
+                <label for="activities">Preferred Activities:</label>
+            </div>
+            <input type="text" id="activities" name="activities">
+        </div>
         
-        <button type="submit">Find Destinations</button>
+        <div class="form-field">
+            <div class="form-label">
+                <label for="budget">Budget per Night:</label>
+            </div>
+            <input type="number" id="budget" name="budget">
+        </div>
+        
+        <div class="form-field">
+            <div class="form-label">
+                <label for="trip-duration">Trip Duration (days):</label>
+            </div>
+            <input type="number" id="trip-duration" name="trip-duration">
+        </div>
+
+        <div class="form-field">
+            <div class="form-label">
+                <label for="country-list">List of countries that you are considering to travel to:</label>
+            </div>
+            <select id="country-list" name="countries" multiple>
+                {% for country in countries %}
+                    <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="submit-btn">Find Destinations</button>
     </form>
     
     <div id="loading-indicator">Loading, please wait...</div>
 
     <div id="results"></div>
+
+    <h2>How It Works</h2>
+
+    <div class="explanation">
+        <p>Final score for each destination is calculated based on</p>
+    </div>
+    <div class="explanation-points">
+        <p>1. Preference matching score: How well the destination matches your activity preferences.</p>
+        <p>2. Safety score: Weighted based on your preferences for safety.</p>
+        <p>3. Social score: Calculated based on ratings/reviews of a destination.</p>
+        <p>4. Budget fit: How well the destination fits within your budget.</p>
+    </div>
 
     <script>
         let slideIndex = 0;
@@ -62,7 +96,6 @@
             slideIndex++;
             if (slideIndex > slides.length) { slideIndex = 1 }    
             slides[slideIndex - 1].style.display = "block";  
-            setTimeout(showSlides, 3000); // Change image every 3 seconds
         }
 
         function changeSlide(n) {
@@ -76,7 +109,19 @@
             slides[slideIndex - 1].style.display = "block";
         }
 
-        showSlides();
+        function startSlideshow() {
+            slideInterval = setInterval(showSlides, 3000);
+        }
+
+        function pauseSlideshow() {
+            clearInterval(slideInterval);
+        }
+
+        function resumeSlideshow() {
+            startSlideshow();
+        }
+
+        startSlideshow();
 
         async function fetchCountryData(countryName) {
             const apiKey = "{{ OPENCAGE_API_KEY }}";
