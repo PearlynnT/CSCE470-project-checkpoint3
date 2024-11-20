@@ -134,6 +134,18 @@ h2 {
     text-align:center;
 }
 
+#score-visualization {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bar-label {
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
 .explanation {
     font-weight: bold;
     text-align: center;
